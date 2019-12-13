@@ -20,6 +20,7 @@ public class Core {
     private CoreDebugger debugger;
     private Renderer renderer;
     private PhysicsEngine physics;
+
     public static Core init(CoreAttributes attributes, Application application, Renderer renderer){
         return new Core(attributes,application, renderer);
     }
