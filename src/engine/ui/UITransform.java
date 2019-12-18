@@ -31,7 +31,11 @@ public class UITransform extends Transform<UITransform> {
 
     public void setPivot(Origin pivot,int width,int height) {
         if(parent == null) return;
+        float xOff = pivot.getX();
+        float yOff = pivot.getY();
 
+        offset.set((int)(width *-xOff),(int)(height*-yOff));
+        /*
         switch (pivot) {
             case TOP_LEFT:
                 offset.set(0,0);
@@ -61,13 +65,19 @@ public class UITransform extends Transform<UITransform> {
                 offset.set(width/2,height);
                 break;
         }
-        this.pivot.set(offset);
 
+         */
+        this.pivot.set(offset);
     }
 
     public void setOrigin(Origin pivot,int width,int height) {
         if(parent == null) return;
 
+        float xOff = pivot.getX();
+        float yOff = pivot.getY();
+
+        offset.set((int)(width *xOff),(int)(height*yOff));
+        /*
         switch (pivot) {
             case TOP_LEFT:
                 offset.set(0,0);
@@ -97,6 +107,7 @@ public class UITransform extends Transform<UITransform> {
                 offset.set(-width/2,-height);
                 break;
         }
+         */
         this.origin.set(offset);
     }
 

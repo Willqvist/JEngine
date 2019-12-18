@@ -101,13 +101,10 @@ public class FileTools {
     public static GeneratedTexture getImage(String path) {
         BufferedImage image;
         try {
-            System.out.println(path + " | " + FileTools.class.getResource(path));
-            image = ImageIO.read(new File(FileTools.class.getResource(path).toURI()));
+            image = ImageIO.read(FileTools.class.getResourceAsStream(path));
             return generateImage(image);
         } catch (IOException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (URISyntaxException e) {
             e.printStackTrace();
         }
         return null;

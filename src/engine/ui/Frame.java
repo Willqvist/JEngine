@@ -11,7 +11,7 @@ public class Frame extends Panel{
     public Frame(WindowComponent window, Scale scale) {
         super(scale);
         setParent(window);
-        setOpacity(0.5f);
+        setOpacity(0f);
         this.window = window;
     }
 
