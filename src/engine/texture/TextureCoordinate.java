@@ -15,8 +15,8 @@ public class TextureCoordinate {
     private TextureCoordinate(int x,int y,int width,int height,Texture texture){
         offsetX = x/(texture.getFullWidth()*1f);
         offsetY = y/(texture.getFullWidth()*1f);
-        this.width = width/(texture.getFullWidth()*1f);
-        this.height= height/(texture.getFullWidth()*1f);
+        this.width = width/(texture.getWidth()*1f);
+        this.height= height/(texture.getHeight()*1f);
     }
 
     public float getOffsetX() {

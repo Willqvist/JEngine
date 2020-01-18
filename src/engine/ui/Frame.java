@@ -13,6 +13,12 @@ public class Frame extends Panel{
         setParent(window);
         setOpacity(0f);
         this.window = window;
+        System.out.println("here: " + window);
     }
 
+    @Override
+    public void revalidate() {
+        super.revalidate();
+        window.revalidate();
+    }
 }

@@ -27,11 +27,13 @@ public class StandardMaterial implements Material {
     TODO: uniform caching... maybe?
      */
     @Override
-    public void bind(Model model, Transform transform, Camera camera) {
+    public boolean bind(Model model, Transform transform, Camera camera) {
         if(albedoTexture != null)
             albedoTexture.bind(0);
         shader.bind(transform,camera);
         shader.setColor(albedoColor);
+
+        return true;
     }
 
     public void setColor(RoffColor color){

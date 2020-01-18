@@ -73,7 +73,6 @@ public class Window implements WindowInterface{
     }
 
     public void preRender(){
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_COLOR_BUFFER_BIT);
         GL11.glClearColor(0 ,1, 1,1);
     }
@@ -107,6 +106,15 @@ public class Window implements WindowInterface{
     @Override
     public void onExit(Runnable runnable) {
         exitListeners.add(runnable);
+    }
+
+    @Override
+    public void enableDoubleSideRender(boolean b) {
+        if(!b) {
+            GL11.glEnable(GL11.GL_CULL_FACE);
+        } else {
+            GL11.glDisable(GL11.GL_CULL_FACE);
+        }
     }
 
     public void lockMouse() {

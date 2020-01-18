@@ -202,6 +202,11 @@ public class Texture {
         return true;
     }
 
+    public boolean isSameTexture(Texture texture) {
+        if(texture == null) return false;
+        return getTextureId() == texture.getTextureId();
+    }
+
     public static Texture createTexture(int width, int height, float[] data) {
         int texture = GL11.glGenTextures();
         FloatBuffer buffer = BufferUtils.createFloatBuffer(data.length);
