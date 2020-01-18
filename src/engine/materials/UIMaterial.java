@@ -8,10 +8,8 @@ import engine.shader.ShaderBank;
 import engine.shader.UIShader;
 import engine.texture.Texture;
 import engine.tools.RoffColor;
-import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
-import java.text.NumberFormat;
 
 public class UIMaterial implements Material {
 
@@ -39,8 +37,12 @@ public class UIMaterial implements Material {
     TODO: uniform caching... maybe?
      */
     @Override
-    public void bind(Model model, Transform transform, Camera camera) {
+    public boolean bind(Model model, Transform transform, Camera camera) {
         shader.bind(transform,camera);
+        if(albedoColor.getAlpha() == 0) {
+            return false;
+        }
+
         if(albedoTexture != null) {
             //if(!shader.isTextureActive())
             shader.setTextureActive(true);
@@ -50,6 +52,7 @@ public class UIMaterial implements Material {
             shader.setTextureActive(false);
         }
         shader.setColor(albedoColor);
+        return true;
     }
 
 

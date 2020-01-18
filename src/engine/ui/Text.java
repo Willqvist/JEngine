@@ -31,8 +31,4 @@ public class Text extends Component{
         super.scaleHeight(h);
     }
 
-    @Override
-    public Model getModel() {
-        return model;
-    }
 }

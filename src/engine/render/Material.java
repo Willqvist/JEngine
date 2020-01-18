@@ -5,6 +5,6 @@ import engine.model.Model;
 
 public interface Material {
 
-    void bind(Model model, Transform transform, Camera camera);
+    boolean bind(Model model, Transform transform, Camera camera);
     void unbind();
 }

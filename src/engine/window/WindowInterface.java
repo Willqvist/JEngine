@@ -11,4 +11,6 @@ public interface WindowInterface {
     int onResize(BiConsumer<Integer,Integer> callback);
 
     void onExit(Runnable runnable);
+
+    void enableDoubleSideRender(boolean b);
 }

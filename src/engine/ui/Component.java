@@ -1,35 +1,31 @@
 package engine.ui;
 
-import engine.materials.UIMaterial;
-import engine.model.Model;
-import engine.model.ModelBuilder;
-import engine.render.IRenderable;
-import engine.render.Material;
-import engine.render.Renderer;
-import engine.render.Transform;
 import engine.texture.Texture;
 import engine.tools.RoffColor;
-import org.joml.Vector2fc;
 import org.joml.Vector2i;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
-import java.text.NumberFormat;
+import java.awt.*;
+import java.util.ArrayList;
 
-public class Component implements IRenderable, ParentResizeListener {
+public class Component {
 
     private int width, height, minWidth = 0, minHeight = 0, maxWidth = 0, maxHeight = 0;
+
     private boolean hasMaxWidth = false,hasMaxHeight = false;
     private Component parent;
-    private UIMaterial material = new UIMaterial();
     private UITransform transform = new UITransform(0,0,0);
-    private static Model model = ModelBuilder.createQuad();
     private ParentResizeListener onResizeListener;
-    private Unit widthUnit = Unit.PIXEL , heightUnit = Unit.PIXEL, paddingUnit = Unit.PIXEL, marginUnit = Unit.PIXEL;
+    private Unit widthUnit, heightUnit, paddingUnit = Unit.PIXEL, marginUnit = Unit.PIXEL;
     private Vector4f margin = new Vector4f(0,0,0,0);
     private Origin origin = Origin.TOP_LEFT, pivot = Origin.TOP_LEFT;
-    public Component() {
-    }
+
+    private float opacity;
+    private RoffColor color = RoffColor.from(Color.WHITE);
+    private Texture texture;
+
+    private ArrayList<Component> components = new ArrayList<>();
 
     public Component(Scale scale) {
         if(scale == Scale.SCALE_TO_FIT) {
@@ -43,9 +39,16 @@ public class Component implements IRenderable, ParentResizeListener {
         }
     }
 
-    public void render(Renderer renderer) {
-        renderer.render(this);
+    public void render(GUIBatch guiBatch) {
 
+        Vector3f pos = transform.getPosition();
+        Vector3f scale = transform.getScale();
+        guiBatch.renderTexture((int) pos.x, (int) pos.y,(int) scale.x,(int) scale.y , texture,color);
+
+        for(Component component : components) {
+            //renderer.render(component);
+            component.render(guiBatch);
+        }
     }
 
     public void setPadding(int padding, Unit unit) {
@@ -90,10 +93,11 @@ public class Component implements IRenderable, ParentResizeListener {
 
 
     protected void setParent(Component parent) {
-        parent.onResize(this);
+        //parent.onResize(this);
+        parent.components.add(this);
         transform.setParent(parent.transform);
         this.parent = parent;
-        this.onParentComponentResize();
+        this.revalidate();
     }
 
     public int getWidth() {
@@ -103,6 +107,8 @@ public class Component implements IRenderable, ParentResizeListener {
                 w = Math.min(maxWidth,w);
             w = Math.max(minWidth,w);
             return w;
+        } else if(widthUnit == Unit.HEIGHT_RATIO) {
+            return (int) transform.getScale().y;
         }
         return width;
     }
@@ -115,6 +121,8 @@ public class Component implements IRenderable, ParentResizeListener {
                 h = Math.min(maxHeight,h);
             h = Math.max(minHeight,h);
             return h;
+        } else if(heightUnit == Unit.WIDTH_RATIO) {
+            return (int) transform.getScale().x;
         }
         return height;
     }
@@ -134,11 +142,11 @@ public class Component implements IRenderable, ParentResizeListener {
             setRealMargin(margin);
         }
 
-        if(widthUnit == Unit.PERCENT) {
+        if(widthUnit == Unit.PERCENT || widthUnit == Unit.HEIGHT_RATIO) {
             setRealWidth(width);
         }
 
-        if(heightUnit == Unit.PERCENT) {
+        if(heightUnit == Unit.PERCENT || heightUnit == Unit.WIDTH_RATIO) {
             setRealHeight(height);
         }
 
@@ -177,6 +185,11 @@ public class Component implements IRenderable, ParentResizeListener {
         this.minHeight = minHeight;
     }
 
+    public void setMaxDimension(int maxWidth,int maxHeight) {
+        setMaxHeight(maxHeight);
+        setMaxWidth(maxWidth);
+    }
+
     public void setMaxHeight(int maxHeight) {
         this.maxHeight = maxHeight;
         hasMaxHeight = true;
@@ -197,7 +210,12 @@ public class Component implements IRenderable, ParentResizeListener {
                 h -= transform.getMargin().w + transform.getMargin().y;
             }
             h = Math.max(minHeight,h);
-        }else {
+        } else if(heightUnit == Unit.WIDTH_RATIO) {
+            h = (int) transform.getScale().x;
+            if(widthUnit == Unit.HEIGHT_RATIO) {
+                setWidth(width,widthUnit);
+            }
+        } else {
             h = height;
         }
 
@@ -218,7 +236,12 @@ public class Component implements IRenderable, ParentResizeListener {
             w = Math.max(minWidth,w);
             if(hasMaxWidth)
                 w = Math.min(maxWidth,w);
-        }else {
+        } else if(widthUnit == Unit.HEIGHT_RATIO) {
+            w = (int) transform.getScale().y;
+            if(heightUnit == Unit.WIDTH_RATIO) {
+                setHeight(height,heightUnit);
+            }
+        } else {
             w = width;
         }
 
@@ -260,34 +283,20 @@ public class Component implements IRenderable, ParentResizeListener {
     }
 
     public void setOpacity(float alpha) {
-        this.material.setAlpha((int)(alpha*256));
+        opacity = (int)(alpha*256);
+        color.setAlpha((int)opacity);
     }
 
     public void setBackgroundColor(RoffColor color) {
-        this.material.setColor(color);
+        this.color = color;
     }
 
     public void setBackgroundImage(Texture texture) {
-        this.material.setAlbedoTexture(texture);
+        this.texture = texture;
     }
 
     protected Component getParent() {
         return parent;
-    }
-
-    @Override
-    public Model getModel() {
-        return model;
-    }
-
-    @Override
-    public Material getMaterial() {
-        return material;
-    }
-
-    @Override
-    public Transform getTransform() {
-        return transform;
     }
 
     public void setDimension(int width, int height) {
@@ -295,8 +304,20 @@ public class Component implements IRenderable, ParentResizeListener {
         setHeight(height);
     }
 
+    public void add(Component component) {
+        component.setParent(this);
+    }
+
     public void setPosition(int x, int y) {
         this.transform.setPosition(x,y,0);
     }
 
+    public void revalidate() {
+        if(parent != null) {
+            onParentComponentResize();
+        }
+        for(Component component : components) {
+            component.revalidate();
+        }
+    }
 }

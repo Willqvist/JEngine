@@ -1,6 +1,7 @@
 package engine.render;
 
 import engine.camera.Camera;
+import engine.model.Model;
 import engine.model.ModelInstance;
 import org.lwjgl.opengl.GL11;
 
@@ -21,7 +22,10 @@ public abstract class Renderer {
         this.camera = camera;
     }
 
-    public abstract void render(IRenderable instance);
+    public void render(IRenderable instance) {
+        render(instance.getModel(),instance.getTransform(),instance.getMaterial());
+    }
+    public abstract void render(Model model, Transform transform, Material material);
 
     public RenderMode getRenderMode(){
         return mode;
