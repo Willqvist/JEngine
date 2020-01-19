@@ -7,6 +7,8 @@ import engine.window.Key;
 import engine.window.Mouse;
 import engine.window.WindowInterface;
 
+import java.util.LinkedList;
+
 public class Engine {
     public static WindowInterface window;
     public static Key key = new Key();
@@ -14,4 +16,17 @@ public class Engine {
     public static Graphics graphics = new Graphics();
     public static CameraHandler camera = new CameraHandler();
     public static IPhysicsEngine physics;
+
+    private static LinkedList<Runnable> runnables = new LinkedList<>();
+
+    public static synchronized void invokeLater(Runnable runnable) {
+        runnables.add(runnable);
+    }
+
+    protected static synchronized void executeEvents() {
+        for(Runnable runnable : runnables) {
+            runnable.run();
+        }
+        runnables.clear();
+    }
 }

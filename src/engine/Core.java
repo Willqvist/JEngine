@@ -1,10 +1,8 @@
 package engine;
 
 import engine.materials.MaterialBank;
-import engine.materials.StandardMaterial;
 import engine.materials.UIMaterial;
 import engine.physics.PhysicsEngine;
-import engine.render.Material;
 import engine.render.Renderer;
 import engine.shader.ShaderBank;
 import engine.shader.UIShader;
@@ -13,7 +11,9 @@ import engine.window.InputListener;
 import engine.window.Window;
 import org.lwjgl.opengl.GL11;
 
-public class Core {
+import java.util.LinkedList;
+
+public class Core{
     private CoreAttributes attributes;
     private Application application;
     private Window window;
@@ -44,6 +44,7 @@ public class Core {
         update();
     }
 
+
     private void update(){
         long lastTime = System.nanoTime(), lastTimer = System.currentTimeMillis(), lastMilliSecond = System.currentTimeMillis();
         long now;
@@ -64,6 +65,7 @@ public class Core {
                 Engine.graphics.deltaTime = (float)deltaTicks;
                 ticks++;
                 Engine.graphics.tick++;
+                Engine.executeEvents();
                 window.update();
                 physics.update();
                 application.update();
@@ -75,7 +77,7 @@ public class Core {
 
                 window.preRender();
                 application.render(renderer);
-                GL11.glDisable(GL11.GL_DEPTH_TEST);
+                //GL11.glDisable(GL11.GL_DEPTH_TEST);
                 UIManager.render();
                 window.postRender();
                 deltaFps--;
@@ -97,7 +99,5 @@ public class Core {
         window.close();
         application.end();
     }
-
-
 
 }
