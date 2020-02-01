@@ -1,9 +1,10 @@
 package engine.physics;
 import engine.tools.MathTools;
+import org.joml.Vector3d;
 import org.joml.Vector3f;
 
 public class Velocity {
-    private Vector3f velocity = new Vector3f();
+    private Vector3d velocity = new Vector3d();
     private float maxVelocity;
     private static Vector3f dir = new Vector3f(0,0,0);
 
@@ -17,7 +18,7 @@ public class Velocity {
         velocity.z = axis == Axis.Z ? 0 : velocity.z;
     }
 
-    public void addForce(float amt, Vector3f direction, Force force){
+    public void addForce(float amt, Vector3d direction, Force force){
         switch (force) {
             case ADD:
                 this.velocity.add(dir.set(direction).mul(amt));
@@ -46,7 +47,7 @@ public class Velocity {
 
     }
 
-    public Vector3f getVelocity() {
+    public Vector3d getVelocity() {
         return velocity;
     }
 

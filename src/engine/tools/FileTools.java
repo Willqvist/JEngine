@@ -1,5 +1,6 @@
 package engine.tools;
 
+import engine.Engine;
 import org.lwjgl.BufferUtils;
 
 import javax.imageio.ImageIO;

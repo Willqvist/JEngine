@@ -2,6 +2,7 @@ package engine.ui;
 
 import engine.render.Transform;
 import org.joml.Vector2i;
+import org.joml.Vector3d;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
@@ -112,19 +113,19 @@ public class UITransform extends Transform<UITransform> {
     }
 
     @Override
-    public Vector3f getPosition() {
-        Vector3f pos = super.getPosition().add(margin.x,margin.y,0).add(origin.x,origin.y,0).add(pivot.x,pivot.y,0);
+    public Vector3d getPosition() {
+        Vector3d pos = super.getPosition().add(margin.x,margin.y,0).add(origin.x,origin.y,0).add(pivot.x,pivot.y,0);
         if(parent != null) {
             return pos.add(parent.padding.x,parent.padding.y,0);
         }
         return pos;
     }
 
-    private static Vector3f scaleRet = new Vector3f(0,0,0);
+    private static Vector3d scaleRet = new Vector3d(0,0,0);
 
     @Override
-    public Vector3f getScale() {
-        Vector3f scale = scaleRet.set(super.getScale());
+    public Vector3d getScale() {
+        Vector3d scale = scaleRet.set(super.getScale());
         if(parent != null) {
             return scale.add(-parent.padding.z,-parent.padding.w,0);
         }

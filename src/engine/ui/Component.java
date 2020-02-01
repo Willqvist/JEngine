@@ -3,6 +3,7 @@ package engine.ui;
 import engine.texture.Texture;
 import engine.tools.RoffColor;
 import org.joml.Vector2i;
+import org.joml.Vector3d;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
@@ -41,8 +42,8 @@ public class Component {
 
     public void render(GUIBatch guiBatch) {
 
-        Vector3f pos = transform.getPosition();
-        Vector3f scale = transform.getScale();
+        Vector3d pos = transform.getPosition();
+        Vector3d scale = transform.getScale();
         guiBatch.renderTexture((int) pos.x, (int) pos.y,(int) scale.x,(int) scale.y , texture,color);
 
         for(Component component : components) {
@@ -202,7 +203,7 @@ public class Component {
 
     private void setRealHeight(int height) {
         int h;
-        Vector3f scale = transform.getScale();
+        Vector3d scale = transform.getScale();
         if(heightUnit == Unit.PERCENT && parent != null) {
             int parentHeight = parent.getHeight();
             h = (int) (norm(height)*parentHeight);
@@ -252,12 +253,12 @@ public class Component {
     }
 
     protected void scaleWidth(int w) {
-        Vector3f scale = transform.getScale();
+        Vector3d scale = transform.getScale();
         transform.setScale(w, scale.y, 1);
     }
 
     protected void scaleHeight(int h) {
-        Vector3f scale = transform.getScale();
+        Vector3d scale = transform.getScale();
         transform.setScale(scale.x, h, 1);
     }
 

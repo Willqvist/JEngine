@@ -36,7 +36,7 @@ public abstract class Shader implements Disposable {
         this(shaderName,shaderName);
     }
     protected Shader(String vertexShader,String fragmentShader) {
-
+        System.out.println("creating new shaderr!!");
         program = GL20.glCreateProgram();
         String pathVertex = Const.SHADER_SRC_RENDERER() + vertexShader;
         String pathFragment = Const.SHADER_SRC_RENDERER() + fragmentShader;

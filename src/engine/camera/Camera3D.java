@@ -3,6 +3,7 @@ package engine.camera;
 import engine.render.Transform;
 import org.joml.FrustumIntersection;
 import org.joml.Matrix4f;
+import org.joml.Vector3d;
 import org.joml.Vector3f;
 
 public class Camera3D implements Camera {
@@ -10,11 +11,11 @@ public class Camera3D implements Camera {
     private Matrix4f viewMatrix,projectionMatrix,vpm;
     private Transform transform;
     private Transform follow;
-    private Vector3f direction = new Vector3f(0,0,0);
+    private Vector3d direction = new Vector3d(0,0,0);
     private FrustumIntersection frustum;
     private float fov, zNear, zFar;
     public Camera3D(float fov, int width,int height,float zNear,float zFar){
-        projectionMatrix = new Matrix4f().perspective(fov,width/(height*1f),zNear,zFar);
+        projectionMatrix = new Matrix4f().perspective((float)Math.toRadians(fov),width/(height*1f),zNear,zFar);
         viewMatrix = new Matrix4f().identity();
         vpm = new Matrix4f().identity();
         transform = new Transform(0,0,0);
@@ -34,22 +35,22 @@ public class Camera3D implements Camera {
     }
 
     public void setViewport(int width,int height) {
-        projectionMatrix = new Matrix4f().perspective(fov,width/(height*1f),zNear,zFar);
+        projectionMatrix = new Matrix4f().perspective((float)Math.toRadians(fov),width/(height*1f),zNear,zFar);
     }
 
     public void follow(Transform transform){
         this.follow = transform;
     }
-    private Vector3f position = new Vector3f(0,0,0);
+    private Vector3d position = new Vector3d(0,0,0);
     public void update(){
         getPosition();
-        Vector3f rotation = transform.getRotation();
-        viewMatrix.identity().rotateX(-rotation.x).rotateY(-rotation.y).rotateZ(-rotation.z).translate(-position.x, -position.y, -position.z);
+        Vector3d rotation = transform.getRotation();
+        viewMatrix.identity().rotateX((float) -rotation.x).rotateY((float) -rotation.y).rotateZ((float) -rotation.z);
         vpm.set(projectionMatrix).mul(viewMatrix);
         frustum.set(vpm);
     }
 
-    public Vector3f getPosition() {
+    public Vector3d getPosition() {
         return position.set(follow.getPosition()).add(this.transform.getPosition());
     }
 
@@ -69,7 +70,7 @@ public class Camera3D implements Camera {
     }
 
     @Override
-    public Vector3f getDirection(Direction direction) {
+    public Vector3d getDirection(Direction direction) {
         switch (direction){
             case RIGHT:
                 this.direction.set((float)Math.sin(-transform.getRotation().y+Math.PI/2),-(float)Math.cos(-transform.getRotation().y+Math.PI/2),0);
@@ -88,7 +89,7 @@ public class Camera3D implements Camera {
     }
 
     public Vector3f getForward(){
-        Vector3f rotation = transform.getRotation();
+        Vector3d rotation = transform.getRotation();
         return new Vector3f((float) (-Math.sin(rotation.y) * Math.cos(rotation.x)), (float) Math.sin(rotation.x), (float) (-Math.cos(rotation.y) * Math.cos(rotation.x)));
     }
 

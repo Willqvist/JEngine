@@ -8,7 +8,7 @@ import org.joml.Matrix4f;
 
 public class AlbedoShader extends Shader {
 
-    private int mvp,color;
+    private int mvp,color,transform,viewProj;
 
     public AlbedoShader() {
         super("albedo");
@@ -30,14 +30,20 @@ public class AlbedoShader extends Shader {
     protected void bindUniforms() {
         mvp = super.getUniform("mvp");
         color = super.getUniform("color");
+        viewProj= super.getUniform("viewProj");
+        transform = super.getUniform("transform");
     }
 
     public void setColor(RoffColor color){
         super.setUniform(this.color,color.toVec3());
     }
 
+    private static Matrix4f viewProjMat = new Matrix4f();
+
     @Override
     protected void onBind(Transform transform, Camera camera) {
-        setUniform(mvp,MatrixTools.toMVP(MatrixTools.createTransformMatrix(transform),camera.getViewProjectionMatrix()));
+        setUniform(viewProj,camera.getViewProjectionMatrix());
+        setUniform(this.transform,MatrixTools.createTransformMatrix(transform));
+        //setUniform(mvp,MatrixTools.toMVP(MatrixTools.createTransformMatrix(transform),camera.getViewProjectionMatrix()));
     }
 }
