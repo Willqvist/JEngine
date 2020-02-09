@@ -8,6 +8,10 @@ public class TextureCoordinate {
         return new TextureCoordinate( x, y, width, height, texture);
     }
 
+    public static TextureCoordinate from(int x,int y,int width,int height,TextureAtlas atlas){
+        return new TextureCoordinate( x, y, width, height, atlas);
+    }
+
     public static TextureCoordinate from(int x,int y,TextureAtlas atlas){
         return new TextureCoordinate( x*atlas.getTileSize(), y*atlas.getTileSize(), atlas.getTileSize(), atlas.getTileSize(), atlas);
     }
@@ -37,5 +41,9 @@ public class TextureCoordinate {
 
     public Texture getTexture(){
         return texture;
+    }
+
+    enum Scale {
+        PIXELS,TILE
     }
 }
