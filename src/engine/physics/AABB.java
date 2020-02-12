@@ -152,7 +152,7 @@ public class AABB implements ICollider {
         return depth;
     }
 
-    public AABB move(int x, int y, int z) {
+    public AABB move(double x, double y, double z) {
         this.position.set(x,y,z);
         return this;
     }
