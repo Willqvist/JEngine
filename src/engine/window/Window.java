@@ -74,7 +74,7 @@ public class Window implements WindowInterface{
 
     public void preRender(){
         GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_COLOR_BUFFER_BIT);
-        GL11.glClearColor(0 ,1, 1,1);
+        GL11.glClearColor(0.145f, 0.611f, 0.941f,1);
     }
     public void postRender(){
         GLFW.glfwSwapBuffers(window);

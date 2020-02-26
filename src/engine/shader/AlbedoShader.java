@@ -8,7 +8,7 @@ import org.joml.Matrix4f;
 
 public class AlbedoShader extends Shader {
 
-    private int mvp,color,transform,viewProj;
+    protected int mvp,color,transform,viewProj;
 
     public AlbedoShader() {
         super("albedo");

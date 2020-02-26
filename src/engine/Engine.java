@@ -29,4 +29,8 @@ public class Engine {
         }
         runnables.clear();
     }
+
+    public static synchronized void addUpdateable(Updateable updateable) {
+
+    }
 }

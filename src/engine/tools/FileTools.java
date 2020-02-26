@@ -91,7 +91,7 @@ public class FileTools {
     public static GeneratedBuffer getBuffer(String path, float ox, float oy, float width, float height){
         BufferedImage image;
         try {
-            image = ImageIO.read(new File(path));
+            image = ImageIO.read(FileTools.class.getResourceAsStream(path));
             return getBuffer(image,ox,oy,width,height);
         } catch (IOException e) {
             // TODO Auto-generated catch block

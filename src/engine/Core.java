@@ -44,7 +44,6 @@ public class Core{
         update();
     }
 
-
     private void update(){
         long lastTime = System.nanoTime(), lastTimer = System.currentTimeMillis(), lastMilliSecond = System.currentTimeMillis();
         long now;

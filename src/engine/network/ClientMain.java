@@ -41,17 +41,28 @@ public class ClientMain {
                 public void onClientDisconnected(Connection tcpConnection, DisconnectReason reason) {
 
                 }
+
             });
         });
         Scanner s = new Scanner(System.in);
         while(true) {
-
+            try {
+                Thread.sleep(10);
+                if(tCon != null) {
+                    tCon.sendPacket(new KeyStatePacket(GLFW.GLFW_KEY_A,(byte)1));
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            /*
             String a = s.next();
             if(a.equals("A")) {
                 tCon.sendPacket(new KeyStatePacket(GLFW.GLFW_KEY_A,(byte)1));
             } else if(a.equals("B")) {
                 tCon.sendPacket(new KeyStatePacket(GLFW.GLFW_KEY_A,(byte)0));
             }
+
+             */
         }
         /*
         master.openUdpConnection(0, 3331, new ConnectionListener() {
